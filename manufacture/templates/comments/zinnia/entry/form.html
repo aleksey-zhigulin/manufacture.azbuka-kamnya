@@ -1,0 +1,51 @@
+{% load comments i18n %}
+
+<!-- Comment Form (name, email and message input for comment form) -->
+<div class="left-comment padding-bottom">
+
+    <form action="{% comment_form_target %}" method="post" id="comment-form" class="comments-form" role="form">
+        <div>{% csrf_token %}</div>
+        {% if form.non_field_errors %}
+            <div class="error">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+        <input type="hidden" name="next" value="{% url 'zinnia:comment_success' %}"/>
+        {% for field in form %}
+            {% if field.is_hidden %}{{ field }}{% endif %}
+        {% endfor %}
+
+
+        <!-- Name -->
+        <div class="name-blog">
+            <input id="id_name" maxlength="50" type="text" name="name" required="required" class="form-control" placeholder="Имя">
+        </div>
+        <!-- Email -->
+        <div class="email-blog">
+            {% if form.email.errors %}
+                    {% for error in form.email.errors %}
+                        <p><strong>{{ error|escape }}</strong></p>
+                    {% endfor %}
+            {% endif %}
+            <input id="id_email" type="email" name="email" required="required" class="form-control" placeholder="Email">
+        </div>
+        <!-- Message -->
+        <div class="message-blog">
+            <textarea id="id_comment" maxlength="3000" class="form-control" name="comment" required="required" placeholder="Сообщение" rows="7"></textarea>
+        </div>
+        <div style="display:none;">
+            <label for="id_honeypot">Если вы что-то введете в это поле, то ваш комментарий будет помечен как спам:</label>
+            <input id="id_honeypot" name="honeypot" type="text">
+        </div>
+        <!-- Button -->
+        <div class="button-blog text-center">
+            {% if user.is_authenticated %}
+                <p class="auth">
+                    {% trans "Comment as" %} <strong>{% firstof user.get_full_name user.get_username %}</strong>. <a href="{% url 'admin:logout' %}">{% trans "Log out" %}</a>.
+                </p>
+            {% endif %}
+            <button type="submit" value="submit" name="submit" class="btn blog-btn">{% trans "Post" %}</button>
+        </div>
+    </form>
+</div>
+<!-- End Comment Form -->

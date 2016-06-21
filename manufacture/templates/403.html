@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Permission denied" %}{% endblock title %}
+
+
+{% block section_title %}
+    <!-- Section General Title -->
+    <div class="general-title bg-color">
+        <h2>{% trans "Permission denied" %}</h2>
+        <div class="title-devider"></div>
+    </div>
+{% endblock section_title %}
+
+{% block section-content %}
+<p class="text-center">{% trans "Sorry, but you don't have the permission to do this action." %}</p>
+{% endblock %}

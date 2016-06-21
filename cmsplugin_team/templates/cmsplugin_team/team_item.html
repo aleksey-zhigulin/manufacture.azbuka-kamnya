@@ -1,0 +1,17 @@
+{% load thumbnail %}
+<!-- Team Item (name, information about, image, social icons) -->
+<div class="col-sm-6 col-md-3 team-item">
+    <!-- Image -->
+    <div class="thumbnail team-inner">
+        <img src="{% thumbnail object.image 705x705 crop upscale %}" alt="{{ object.name }}">
+    </div>
+    <div class="team-caption">
+        <!-- Name -->
+        <div class="team-title">
+            <h3>{{ object.name|upper }}</h3>
+        </div>
+        <!-- Info -->
+        <h5>{{ object.post }}</h5>
+        <p>{{ object.description }}</p>
+    </div>
+</div>

@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load staticfiles cms_tags %}
+
+{% block title %}{% page_attribute "title" %}{% endblock title %}
+
+{% block section_title %}
+    <!-- Section General Title -->
+    <div class="general-title bg-color">
+        <h2>{% page_attribute "page_title" %}</h2>
+        <div class="title-devider"></div>
+    </div>
+{% endblock section_title %}
+
+{% block content %}
+
+    <!-- Site Wrapper -->
+    <div class="site-wrapper">
+
+        <!-- Contact -->
+        <div class="container padding-bottom text-center contact-adress">
+            <!-- All Contact Information (phone, street, email, website, working hours) -->
+            <div class="row">
+                <!-- Description -->
+                <div class="col-md-8 col-md-offset-2">
+                    {% placeholder "text" %}
+                </div>
+                <!-- Adress -->
+                <div class="col-sm-4 col-md-4">
+                    <h3>Адрес</h3>
+                    <address>
+                        {% placeholder "adress" %}
+                    </address>
+                </div>
+                <!-- Contact Information -->
+                <div class="col-sm-4 col-md-4">
+                    <h3>Контакты</h3>
+                    <address>
+                        {% placeholder "contacts" %}
+                    </address>
+                </div>
+                <!-- Working Hours -->
+                <div class="col-sm-4 col-md-4">
+                    <h3>Часы работы</h3>
+                    <address>
+                        {% placeholder "open hours" %}
+                    </address>
+                </div>
+            </div><!-- /row -->
+            <!-- End All Contact Information -->
+
+        </div><!-- /container -->
+        <!-- End Contact -->
+
+    </div><!-- /site wrapper -->
+    <!-- End Site Wrapper -->
+
+    <!-- Contact Form (name, email, phone and message inputs for your email form "should change your email adress in contact.php file") -->
+    <div class="bg-color">
+        <div class="container">
+            <div class="col-lg-12" id="contact">
+                {% placeholder "contact form" %}
+            </div>
+        </div>
+    </div>
+    <!-- End Contact Form -->
+
+    {% placeholder "map" %}
+{% endblock %}
+

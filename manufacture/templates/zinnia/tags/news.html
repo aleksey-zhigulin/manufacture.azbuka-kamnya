@@ -1,0 +1,52 @@
+{% load i18n %}
+{% load thumbnail %}
+
+{% if entries %}
+    <div class="row">
+        {% for entry in entries %}
+            <!-- Blog Item (image, title, description, link and date for your blog post) -->
+            <div class="col-sm-4 col-md-4">
+                <div class="thumbnail blog-post">
+                    <!-- Image -->
+                    {% if entry.image %}
+                        <a href="{{ entry.get_absolute_url }}">
+                            <img src="{% thumbnail entry.image 800x600 crop upscale %}" alt="{{ entry.image_caption|default:entry.title }}"/>
+                        </a>
+                    {% endif %}
+                    <!-- Title and Description -->
+                    <div class="caption">
+                        <div class="blog-inner-title">
+                            <a href="{{ entry.get_absolute_url }}" title="{{ entry.title }}" rel="bookmark">
+                                <h3>{{ entry.title }}</h3>
+                            </a>
+                        </div>
+                        {{ entry.html_preview|safe }}
+                        <div class="blog-meta">
+                    <span><i class="fa fa-calendar"></i>
+                    <a href="{{ entry.get_absolute_url }}"> <time class="published" datetime="{{ entry.publication_date|date:"c" }}"> {{ entry.publication_date|date:"DATE_FORMAT" }}</time></a>
+                </span>
+                    <span><i class="fa fa-comment"></i>
+                        {% if comment_count %}
+                            <a href="{{ entry.get_absolute_url }}#comments"
+                               title="{% blocktrans with entry=entry.title %}Comments on {{ entry }}{% endblocktrans %}">
+                                {% blocktrans count comment_count=comment_count %}{{ comment_count }} comment{% plural %}{{ comment_count }} comments{% endblocktrans %}
+                            </a>
+                        {% else %}
+                            {% if entry.comments_are_open %}
+                                {% trans "No comments yet." %}
+                                <a href="{{ entry.get_absolute_url }}#comment-form"
+                                   title="{% blocktrans with entry=entry.title %}Leave a comment on {{ entry }}{% endblocktrans %}">
+                                    {% trans "Be first to comment!" %}
+                                </a>
+                            {% else %}
+                                {% trans "Comments are closed." %}
+                            {% endif %}
+                        {% endif %}
+                    </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}

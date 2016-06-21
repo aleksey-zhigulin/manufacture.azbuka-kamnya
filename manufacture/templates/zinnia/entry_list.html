@@ -1,0 +1,80 @@
+{% extends "zinnia/base.html" %}
+{% load i18n %}
+{% load zinnia %}
+{% load menu_tags %}
+
+{% block meta-description %}{% spaceless %}
+    {% if category %}
+        {% if category.description %}
+            {{ category.description|striptags|safe }}
+        {% else %}
+            {% blocktrans with object=category %}The last entries categorized under {{ object }}{% endblocktrans %}
+        {% endif %}
+    {% endif %}
+
+    {% if tag %}
+        {% blocktrans with object=tag %}The last entries tagged with {{ object }}{% endblocktrans %}
+    {% endif %}
+
+    {% if author %}
+        {% blocktrans with object=author %}The last entries by {{ object }}{% endblocktrans %}
+    {% endif %}
+
+{% endspaceless %}{% endblock meta-description %}
+
+{% block meta-description-page %}{% if page_obj %}{% ifnotequal page_obj.number 1 %} {% blocktrans with object=page_obj.number %}page {{ object }}{% endblocktrans %}{% endifnotequal %}{% endif %}{% endblock meta-description-page %}
+
+{% block title %}{% spaceless %}
+    {% if category %}
+        {% blocktrans with object=category %}Category {{ object }}{% endblocktrans %}
+    {% endif %}
+
+    {% if tag %}
+        {% blocktrans with object=tag %}Tag {{ object }}{% endblocktrans %}
+    {% endif %}
+
+    {% if author %}
+        {% blocktrans with object=author %}Author {{ object }}{% endblocktrans %}
+    {% endif %}
+
+{% endspaceless %}{% endblock title %}
+
+{% block title-page %}{% if page_obj %}{% ifnotequal page_obj.number 1 %} - {% blocktrans with object=page_obj.number %}Page {{ object }}{% endblocktrans %}{% endifnotequal %}{% endif %}{% endblock title-page %}
+
+{% block link %}
+    {{ block.super }}
+    {% if category %}
+        <link rel="alternate" type="application/rss+xml" title="{% blocktrans with object=category %}RSS feed of {{ object }}{% endblocktrans %}" href="{% url 'zinnia:category_feed' category.tree_path %}" />
+    {% endif %}
+    {% if tag %}
+        <link rel="alternate" type="application/rss+xml" title="{% blocktrans with object=tag %}RSS feed of {{ object }}{% endblocktrans %}" href="{% url 'zinnia:tag_feed' tag.name %}" />
+    {% endif %}
+    {% if author %}
+        <link rel="alternate" type="application/rss+xml" title="{% blocktrans with object=author %}RSS feed of {{ object }}{% endblocktrans %}" href="{% url 'zinnia:author_feed' author.get_username %}" />
+    {% endif %}
+{% endblock link %}
+
+{% block menu %}
+    {% show_menu 0 1 100 100 "menu.html" %}
+{% endblock %}
+
+{% block blog-content %}
+    {% block content-loop %}
+        {% for object in object_list %}
+            {% zinnia_loop_template object.content_template as template %}
+            {% include template with object_content=object.html_preview continue_reading=1 %}
+        {% empty %}
+            <p class="info">
+                <a href="{% url 'admin:zinnia_entry_add' %}">{% trans "No entries yet." %}</a>
+            </p>
+        {% endfor %}
+    {% endblock content-loop %}
+
+    {% block content-pagination %}
+        {% if is_paginated %}
+            {% zinnia_pagination page_obj %}
+        {% endif %}
+    {% endblock content-pagination %}
+{% endblock blog-content %}
+
+

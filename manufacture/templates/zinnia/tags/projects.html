@@ -1,0 +1,35 @@
+{% load i18n %}
+{% load thumbnail %}
+{% if entries %}
+
+    <div class="general-title">
+        <h2>{% if title %}{{ title }}{% else %}Похожие проекты{% endif %}</h2>
+        <div class="title-devider"></div>
+    </div>
+
+    <div class="row">
+        {% for entry in entries %}
+            <!-- Project Item (image,link and description for your project) -->
+            <div class="col-sm-6 col-md-3">
+                <div class="project-inner">
+                    <a href="{{ entry.get_absolute_url }}">
+                        <!-- Image -->
+                        {% if entry.image %}
+                            <img src="{% thumbnail entry.image 800x600 crop upscale  %}" alt="{{ entry.image_caption|default:entry.title }}"/>
+                        {% endif %}
+                        <div class="project-caption">
+                            <!-- Title and Date -->
+                            <div class="project-details">
+                                <p><i class="fa fa-plus fa-lg"></i></p>
+                                <h3>{{ entry.title }}</h3>
+                                <p><small>{{ entry.publication_date|date:"Y/m" }}</small></p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    </div><!-- /row -->
+
+{% endif %}
+

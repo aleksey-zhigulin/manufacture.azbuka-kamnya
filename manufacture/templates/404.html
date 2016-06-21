@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Page not found" %}{% endblock title %}
+
+
+{% block section_title %}
+    <!-- Section General Title -->
+    <div class="general-title bg-color">
+        <h2>{% trans "Page not found" %}</h2>
+        <div class="title-devider"></div>
+    </div>
+{% endblock section_title %}
+
+{% block section-content %}
+<p class="text-center">{% trans "Sorry, but the requested page could not be found." %}</p>
+{% endblock %}

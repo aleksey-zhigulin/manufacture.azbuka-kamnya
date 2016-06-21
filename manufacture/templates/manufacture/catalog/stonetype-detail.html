@@ -1,0 +1,116 @@
+{% extends "shop/catalog/product-detail.html" %}
+{% load static cms_tags sekizai_tags sass_tags thumbnail djng_tags%}
+
+{% block section_title %}
+    <div class="general-title bg-color">
+        <h2>{% render_model product "product_name" %}</h2>
+        <div class="title-devider"></div>
+    </div>
+{% endblock %}
+
+{% block section-content %}
+
+    <div class="container padding-bottom">
+
+        <div class="row product-detail">
+            <div class="col-xs-6 col-sm-8">
+                <div class="media">
+                    <div class="media-left">
+                        {% thumbnail product.sample_image 149x149 crop as thumb %}
+                        <img class="media-object" src="{{ thumb.url }}" width="{{ thumb.width }}" height="{{ thumb.height }}" alt="{{ product.product_name }}">
+                    </div>
+                    <div class="media-body">
+                        <h3 class="media-heading">Цена от <span class="color-brand">{{ data.product.price }}</span>  за м<sup>2</sup></h3>
+                        <p>{{ product.description }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6 col-sm-4">
+                <table class="table table-bordered">
+                    <tbody class="table-striped">
+                    <tr>
+                        <td>Порода</td>
+                        <td>{{ product.stone_rock.name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Цвет</td>
+                        <td>{{ product.stone_color.name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Страна производитель</td>
+                        <td>{{ product.stone_country.name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Тип обработки</td>
+                        <td>{{ product.stone_treatment.name }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <section class="text-center bg-color">
+
+        <!-- Section General Title -->
+        <div class="general-title">
+            <h2>Наличие на складах</h2>
+            <p>Цены зависят от курса ЦБ. Указанные ниже цены действительны до 23:59 {% now "d.m.Y" %}</p>
+            <div class="title-devider"></div>
+        </div>
+
+        {% with product.get_stocks as stocks %}
+            <div class="container padding-bottom">
+
+                <div class="row">
+                    {% for city, variants in stocks.iteritems %}
+                        <div class="col-xs-12 col-sm-4">
+                            <h3 class="text-center">{{ city }}</h3>
+                            {% if variants %}
+                                {% regroup variants|dictsort:"form_and_thickness" by form_and_thickness as variants_list %}
+                                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                    {% for variant in variants_list %}
+                                        <div class="panel panel-default">
+                                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ forloop.counter }}" aria-expanded="false" aria-controls="collapse{{ forloop.counter }}">
+                                                <div class="panel-heading"  role="tab" id="heading{{ forloop.counter }}">
+                                                    <div class="service-title">
+                                                        <h4>{{ variant.grouper }}</h4>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div id="collapse{{ forloop.counter }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{ forloop.counter }}">
+                                                <table class="table table-bordered  table-condensed">
+                                                    <thead>
+                                                    <tr class="text-center">
+                                                        <th>Изображение</th>
+                                                        <th>Размер, {% if 'Слэб' in variant.grouper %}м{% else %}мм{% endif %}</th>
+                                                        <th>Цена за м<sup>2</sup></th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for item in variant.list %}
+                                                        <tr class="text-center">
+                                                            <td>{% thumbnail item.image 100x50 crop as thumb %}
+                                                                <img class="img-responsive" src="{{ thumb.url }}" width="{{ thumb.width }}" height="{{ thumb.height }}" alt="{{ product.product_name }}">
+                                                            </td>
+                                                            <td>{{ item.stone_size.name }}</td>
+                                                            <td>{{ item.converted_price }}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <p>Нет в наличии</p>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endwith %}
+    </section>
+
+{% endblock section-content %}

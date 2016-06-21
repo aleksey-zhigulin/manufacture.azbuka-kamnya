@@ -1,0 +1,16 @@
+{% load thumbnail %}
+<!-- Slider -->
+
+<ul class="gallery-inner">
+    {% for object in objects_list %}
+        <!-- Image -->
+        <li>
+            {%  thumbnail object.image "800x600" crop as image %}
+            <div itemprop="image" itemscope itemtype="http://schema.org/ImageObject">
+            <a href="{{ image.url }}" data-lightbox="example-set">
+                <img src="{{ image.url }}" alt="{% if object.alt_tag %}{{ object.alt_tag }}{% else %}{{ object.image.default_alt_text }}{% endif %}" itemprop="contentUrl" >
+            </a>
+            </div>
+        </li>
+    {% endfor %}
+</ul>

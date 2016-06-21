@@ -1,0 +1,87 @@
+{% load i18n %}
+{% load zinnia thumbnail %}
+
+<!-- Blog Post (image, title, date and description of post) -->
+{% if not nowrapper %}<div class="col-sm-6 col-md-6">{% endif %}
+<article id="entry-{{ object.pk }}" class="{% if object.featured %} featured{% endif %}" itemscope itemtype="http://schema.org/Article">
+    <div class="thumbnail blog-inner">
+
+        <!-- Image -->
+        {% if object.image %}
+            <div itemprop="image" itemscope itemtype="http://schema.org/ImageObject">
+                {% if continue_reading %}
+                    <a href="{{ object.get_absolute_url }}" title="{{ object.title }}" rel="bookmark">
+                {% endif %}
+
+                <img src="{% if not nowrapper %}{% thumbnail object.image 800x600 crop upscale %}{% else %}{% thumbnail object.image 1200x350 crop upscale %}{% endif %}"
+                     alt="{{ object.image_caption|default:object.title }}" itemprop="contentUrl" />
+                {% if object.image_caption %}
+                    <meta itemprop="caption" content="{{ object.image_caption }}">
+                {% endif %}
+
+                {% if continue_reading %}
+                    </a>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        <div class="caption">
+            <!-- Title -->
+            <div class="blog-inner-title">
+                <a href="{{ object.get_absolute_url }}" title="{{ object.title }}" rel="bookmark" itemprop="url">
+                    <h3>{{ object.title|widont }}</h3>
+                </a>
+            </div>
+            <!-- Date -->
+            <div class="blog-meta">
+                <span><i class="fa fa-calendar"></i>
+                    <a href="{{ object.get_absolute_url }}"> <time class="published" datetime="{{ object.publication_date|date:"c" }}" itemprop="datePublished"> {{ object.publication_date|date:"DATE_FORMAT" }}</time></a>
+                    <meta itemprop="dateCreated" content="{{ object.creation_date|date:"c" }}" />
+                </span>
+                {% with comment_count=object.comment_count %}
+                    <meta itemprop="commentCount" content="{{ object.comment_count }}" />
+                    <meta itemprop="discussionUrl" url="{{ object.get_absolute_url }}#comments" />
+                    <span><i class="fa fa-comment"></i>
+                        {% if comment_count %}
+                            <a href="{{ object.get_absolute_url }}#comments"
+                               title="{% blocktrans with object=object.title %}Comments on {{ object }}{% endblocktrans %}">
+                                {% blocktrans count comment_count=comment_count %}{{ comment_count }} comment{% plural %}{{ comment_count }} comments{% endblocktrans %}
+                            </a>
+                        {% else %}
+                            {% if object.comments_are_open %}
+                                {% trans "No comments yet." %}
+                                <a href="{{ object.get_absolute_url }}#comment-form"
+                                   title="{% blocktrans with object=object.title %}Leave a comment on {{ object }}{% endblocktrans %}">
+                                    {% trans "Be first to comment!" %}
+                                </a>
+                            {% else %}
+                                {% trans "Comments are closed." %}
+                            {% endif %}
+                        {% endif %}
+                    </span>
+                {% endwith %}
+                {#                <span><i class="fa fa-book"></i> Количество слов - {{ object.word_count }}</span>#}
+                <meta itemprop="wordCount" content="{{ object.word_count }}" />
+            </div>
+            <!-- Description -->
+            {% if not continue_reading and object.lead %}
+                <div class="entry-summary" itemprop="headline">
+                    {{ object.html_lead|safe }}
+                </div>
+            {% endif %}
+            <div class="entry-content" itemprop="articleBody">
+                {{ object_content|safe }}
+            </div>
+            {% if continue_reading and object_content.has_more %}
+                <p>
+                    <a href="{{ object.get_absolute_url }}"
+                       title="{% blocktrans with object=object.title percent=object_content.remaining_percent|floatformat:0 %}{{ percent }}% of {{ object }} still remains to read.{% endblocktrans %}"
+                       rel="bookmark" itemprop="url">
+                        {% trans "Continue reading" %}
+                    </a>
+                </p>
+            {% endif %}
+        </div>
+    </div>
+</article>
+{% if not nowrapper %}</div>{% endif %}

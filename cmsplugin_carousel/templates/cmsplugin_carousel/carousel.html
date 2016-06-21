@@ -1,0 +1,26 @@
+{% load thumbnail %}
+<!-- Slider -->
+
+<div id="{{ auto_id }}" class="carousel slide " data-ride="carousel" data-interval="{{ rotate_interval }}">
+    <ol class="carousel-indicators">
+        {% for object in objects_list %}
+            <li {% if forloop.first %}class=active{% else %}class=""{% endif %} data-target="#{{ auto_id }}" data-slide-to="{{ forloop.counter0 }}"></li>
+        {% endfor %}
+    </ol>
+    <div class="carousel-inner">
+        {% for object in objects_list %}
+            <div class="item {% if forloop.first %}active{% endif %}">
+                <img class="img-responsive" src="{%  thumbnail object.image "1920x700" crop upscale %}" alt="{% if object.alt_tag %}{{ object.alt_tag }}{% else %}{{ object.image.default_alt_text }}{% endif %}">
+                <div class="carousel-caption header-carousel-caption hidden-xs">
+                    {% if object.text %}<h1>{{ object.text|safe }}</h1>{% endif %}
+                    {% if object.link %}
+                        <a href="{{ object.link.get_public_url }}" class="btn white-btn" {% if object.open_in_tab %}target="_blank"{% endif %}>
+                            {{ object.link_text }}
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<!-- End Slider -->

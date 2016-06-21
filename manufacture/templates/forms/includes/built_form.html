@@ -1,0 +1,72 @@
+{% load sekizai_tags %}
+
+<div id ="message" style="display: none"></div>
+
+<form id="form_builder_{{ form.pk }}" action="{{ form.get_absolute_url }}" method="post"
+      {% if form_for_form.is_multipart %}enctype="multipart/form-data"{% endif %}>
+    {% csrf_token %}
+    <fieldset>
+        {% if form.title == 'Контактная форма' %}
+            <fieldset>
+                <div class="col-md-6">
+                    <label class="hidden" for="id_name">name:</label><input class="charfield required" id="id_name" maxlength="2000" name="name" placeholder="Имя" required="" type="text">
+                    <label class="hidden" for="id_email">email:</label><input class="emailfield required" id="id_email" maxlength="2000" name="email" placeholder="Email" required="" type="email">
+                    <label class="hidden" for="id_phone">phone:</label><input class="charfield" id="id_phone" maxlength="2000" name="phone" placeholder="Телефон" type="text">
+                </div>
+                <div class="col-md-6">
+                    <label class="hidden" for="id_comment">comment:</label><textarea class="charfield required" cols="40" id="id_comment" maxlength="2000" name="comment" placeholder="Сообщение" required="" rows="10"></textarea>
+                </div>
+                <div class="col-md-12 text-center">
+                    <button id="submit" type="submit" value="{{ form.button_text }}" class="btn btn-default btn-submit submit">
+                        {{ form.button_text }}
+                    </button>
+                </div>
+            </fieldset>
+        {% else %}
+            {{ form_for_form }}
+        {% endif %}
+    </fieldset>
+</form>
+
+{% addtoblock 'js' %}
+    <script>
+        $(document).ready(function() {
+
+            // handle form submission via ajax
+            $("#form_builder_{{ form.pk }}").on('submit', function(e) {
+
+                var action = '{{ form.get_absolute_url }}';
+
+                $("#message").slideUp(750,function() {
+                    $('#message').hide();
+
+                    $('#submit')
+                            .after('<img src="/static/img/ajax-loader.gif" class="loader" />')
+                            .attr('disabled','disabled');
+
+                    $.post(action, $("#form_builder_{{ form.pk }}").serialize(),
+                            function(data){
+                                document.getElementById('message').innerHTML = data.message;
+                                $('#message').slideDown('slow');
+                                $('#form_builder_{{ form.pk }} img.loader').fadeOut('slow',function(){$(this).remove()});
+                                $('#submit').removeAttr('disabled');
+                                if($.isEmptyObject(data.errors)) {
+                                    $('#form_builder_{{ form.pk }}').slideUp('slow');
+                                } else {
+                                    var errors = '';
+                                    $.each(data.errors, function(k, v) {
+                                        errors += '<p>' + v[0] + '</p>';
+                                    });
+                                    $('#message').html('<div class="error_message">' + errors + '</div>');
+                                }
+                            }
+                    );
+                });
+
+                // prevent default form POST
+                return false;
+
+            });
+        });
+    </script>
+{% endaddtoblock 'js' %}

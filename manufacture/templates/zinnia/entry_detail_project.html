@@ -1,0 +1,108 @@
+{% extends "zinnia/entry_detail_base.html" %}
+{% load i18n %}
+{% load zinnia %}
+{% load thumbnail %}
+{% load manufacture %}
+{% load cms_tags %}
+{% load sekizai_tags  %}
+{% load staticfiles  %}
+{% load menu_tags %}
+
+{% block extra_css %}
+    {% addtoblock "css" %}
+        <link rel="stylesheet" href="{% static 'plugins/lightbox/css/lightbox.css' %}">
+    {% endaddtoblock %}{% endblock %}
+{% block extra_js %}{% addtoblock "js" %}
+    <script src="{% static 'plugins/lightbox/js/lightbox.js' %}"></script>
+{% endaddtoblock %}{% endblock %}
+
+{% block menu %}
+    {% show_menu 0 1 100 100 "projects_menu.html" %}
+{% endblock menu %}
+
+{% block blog-content %}
+
+    {% block entry-content %}
+        <article id="entry-{{ object.pk }}" class="{% if object.featured %} featured{% endif %}" itemscope itemtype="http://schema.org/Article">
+            {% with object_content=object.html_content %}
+                <!-- Project Inner -->
+                <div class="container">
+                    <div class="row">
+                        <!-- Project Image Gallery (for more images in your gallery, image width can be changed in styles.css class gallery-inner) -->
+                        <div class="col-sm-7">
+                            <!-- Image -->
+                            {% if object.pictures.all|length > 1 %}
+                                <ul class="gallery-inner">
+                                    {% for object in object.pictures.all %}
+                                        <!-- Image -->
+                                        <li>
+                                            {%  thumbnail object.image "800x600" crop as image %}
+                                            <div itemprop="image" itemscope itemtype="http://schema.org/ImageObject">
+                                                <a href="{{ image.url }}" data-lightbox="example-set">
+                                                    <img src="{% thumbnail object.image 326x245 crop %}" alt="{% if object.alt_tag %}{{ object.alt_tag }}{% else %}{{ object.image.default_alt_text }}{% endif %}" itemprop="contentUrl" >
+                                                </a>
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                {% if object.image %}
+                                    <div itemprop="image" itemscope itemtype="http://schema.org/ImageObject">
+                                        <img class="img-responsive" src="{% thumbnail object.image 652x490 crop upscale %}"
+                                             alt="{{ object.image_caption|default:object.title }}" itemprop="contentUrl" />
+                                        {% if object.image_caption %}
+                                            <meta itemprop="caption" content="{{ object.image_caption }}">
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+
+                        <!-- Project Information (location, date, category some information about your project) -->
+                        <div class="col-sm-5">
+                            <div class="project-info">
+                                <ul>
+                                    <!-- Date -->
+                                    <li>
+                                        <b>Дата:</b> <time class="published" datetime="{{ object.publication_date|date:"c" }}" itemprop="datePublished"> {{ object.publication_date|date:"DATE_FORMAT" }}</time>
+                                        <meta itemprop="dateCreated" content="{{ object.creation_date|date:"c" }}" />
+                                    </li>
+
+                                    <!-- Category -->
+                                    {% if object.tags %}
+                                        <li>
+                                            <b>Ключевые слова:</b> {{ object.tags }}
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                            <!-- Description -->
+                            <div class="project-description">
+                                <div class="entry-content" itemprop="articleBody">
+                                    {{ object_content|safe }}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div><!-- row -->
+                </div><!-- /container -->
+                <!-- End Project Inner -->
+
+                <!-- Related Projects -->
+                <section class="projects padding-top">
+                    <!-- Section General Title -->
+                    {% get_similar_entries_in_category 4 "zinnia/tags/projects.html" category='projects' %}
+                    <!-- View All Projects Button -->
+                    <div class="padding-top padding-bottom text-center">
+                        <a href="/blog/categories/projects/" class="btn black-btn">Смотреть все проекты</a>
+                    </div>
+                </section>
+                <!-- End Related Projects -->
+
+
+            {% endwith %}
+        </article>
+    {% endblock entry-content %}
+
+{% endblock blog-content %}
+

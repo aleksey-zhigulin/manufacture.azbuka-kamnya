@@ -1,0 +1,31 @@
+{# This template is shared between Django and AngularJS #}
+{% load djng_tags i18n %}
+{% angularjs ng %}
+    <figure class="project-item shop-list-item col-xs-4 col-sm-3 col-lg-2"{% if ng %} ng-repeat="product in catalog.products"{% endif %}>
+        <div class="thumbnail projects-thumbnail">
+
+            <a href="{{ product.product_url }}">
+                {#                <h4>{{ product.product_name }}</h4>#}
+                <div{% if ng %} ng-bind-html="product.media"{% endif %}>{{ product.media }}</div>
+            </a>
+            <div class="project-inner-caption">
+                <!-- Title -->
+{#                <div class="project-title">#}
+                    <p>
+                        <strong class="text-nowrap">{{ product.product_name }}</strong><br/>
+                        от <strong class="color-brand">{{ product.price }}</strong>
+                    </p>
+
+{#                </div>#}
+                <!-- City and Date -->
+{#                <p>#}
+{##}
+{#                </p>#}
+            </div>
+            {#            <figcaption>#}
+            {#                <strong class="pull-right">Цена от <span class="color-brand">{{ product.price }}</span> </strong>#}
+            {#            </figcaption>#}
+
+        </div>
+    </figure>
+{% endangularjs %}

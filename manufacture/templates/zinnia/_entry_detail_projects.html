@@ -1,0 +1,36 @@
+{% load i18n %}
+{% load zinnia thumbnail %}
+
+<!-- Project Item (image, title, city, date and description of project)-->
+<div class="col-sm-6 col-md-4 project-item">
+    <article id="entry-{{ object.pk }}" class="{% if object.featured %} featured{% endif %}" itemscope itemtype="http://schema.org/Article">
+        <div class="thumbnail projects-thumbnail">
+            {% if object.image %}
+                <div itemprop="image" itemscope itemtype="http://schema.org/ImageObject">
+                    {% if continue_reading %}
+                        <a href="{{ object.get_absolute_url }}" title="{{ object.title }}" rel="bookmark">
+                    {% endif %}
+                    <img src="{% thumbnail object.image 800x600 crop upscale %}" alt="{{ object.image_caption|default:object.title }}" itemprop="contentUrl" />
+                    {% if object.image_caption %}
+                        <meta itemprop="caption" content="{{ object.image_caption }}">
+                    {% endif %}
+
+                    {% if continue_reading %}
+                        </a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="project-inner-caption">
+            <!-- Title -->
+            <div class="project-title">
+                <h3>{{ object.title|widont }}</h3>
+            </div>
+            <!-- City and Date -->
+            <p>
+                <i class="fa fa-calendar"></i> <time class="published" datetime="{{ object.publication_date|date:"c" }}" itemprop="datePublished"> {{ object.publication_date|date:"m/d/Y" }}</time>
+                <meta itemprop="dateCreated" content="{{ object.creation_date|date:"c" }}" />
+            </p>
+        </div>
+    </article>
+</div>

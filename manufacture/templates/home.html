@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% load staticfiles cms_tags zinnia manufacture %}
+
+{% block title %}{% page_attribute "page_title" %}{% endblock title %}
+
+{% block content %}
+    {% placeholder "slider" %}
+
+    <!-- Site Wrapper -->
+    <div class="site-wrapper">
+        <!-- Who We Are -->
+        <div class="container text-center">
+            <!-- Section General Title -->
+            <div class="general-title">
+                <h2>{% placeholder "section 1 title " %}</h2>
+                <div class="title-devider"></div>
+            </div>
+            <div class="row">
+                <!-- Section Description -->
+                <div class="col-md-10 col-md-offset-1">
+                    {% placeholder "section 1 description" %}
+                </div>
+            </div><!-- /row -->
+        </div><!-- /container -->
+        <!-- End Who We Are -->
+
+        <!-- Projects -->
+        <div class="container-fluid projects padding-top">
+            {% get_random_entries_in_category 8 template="zinnia/tags/projects.html" category='projects' title='Наши работы'%}
+        </div><!-- /container -->
+
+        <!-- See All Our Work Button -->
+        <div class="all-projects text-center">
+            <a href="/blog/categories/projects" class="btn orange-btn">
+                Смотреть все наши проекты
+            </a>
+        </div>
+        <!-- End Projects -->
+
+        <!-- Our Services -->
+        <div class="container padding-top text-center">
+            <!-- Section General Title -->
+            <div class="general-title">
+                <h2>{% placeholder "section 2 title" %}</h2>
+                <div class="title-devider"></div>
+            </div>
+            <!-- Section Description -->
+            {% placeholder "section 2 description" %}
+            <div class="row padding-top">
+                <!-- Services Item (icon, title and description for your service) -->
+                <div class="col-sm-4 col-md-4">
+                    {% placeholder "service 1" %}
+                </div>
+
+                <!-- Services Item (icon, title and description for your service) -->
+                <div class="col-sm-4 col-md-4">
+                    {% placeholder "service 2" %}
+                </div>
+
+                <!-- Services Item (icon, title and description for your service) -->
+                <div class="col-sm-4 col-md-4">
+                    {% placeholder "service 3" %}
+                </div>
+            </div><!-- /row -->
+
+            <!-- View All Services Button -->
+            <div class="padding-top padding-bottom">
+                <a href="/services/" class="btn black-btn">
+                    Смотреть все услуги
+                </a>
+            </div>
+
+        </div><!-- /container -->
+        <!-- End Our Services -->
+
+        <!-- From Blog -->
+        <section class="bg-color padding-top text-center">
+            <div class="container">
+                <!-- Section General Title -->
+                <div class="general-title">
+                    <h2>{% placeholder "section 3 title" %}</h2>
+                    <div class="title-devider"></div>
+                </div>
+                {% get_random_entries_in_category 3 template="zinnia/tags/news.html" category='news' %}
+            </div><!-- /container -->
+
+            <!-- All Posts Button -->
+            <div class="text-center padding-top padding-bottom">
+                <a href="/blog/categories/news" class="btn black-btn">Смотреть все записи</a>
+            </div>
+        </section>
+        <!-- End From blog -->
+    </div><!-- /site-wrapper -->
+    <!-- End Site Wrapper -->
+
+{% endblock content %}

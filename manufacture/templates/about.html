@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load staticfiles cms_tags %}
+
+{% block title %}{% page_attribute "page_title" %}{% endblock title %}
+
+{% block section_title %}
+    <!-- Section General Title -->
+    <div class="general-title bg-color">
+        <h2>{% placeholder "general title" %}</h2>
+        <div class="title-devider"></div>
+    </div>
+{% endblock section_title %}
+
+{% block content %}
+    <!-- Site Wrapper -->
+    <div class="site-wrapper">
+
+        <!-- About Us -->
+        <div class="container">
+
+            <!-- Our Studio (your studio information and images for slider) -->
+            <div class="row padding-bottom">
+                <div class="col-md-10 col-md-offset-1">
+                    {% placeholder "description" %}
+                </div>
+
+                <!-- Slider for images from your studio -->
+                <div class="col-md-10 col-md-offset-1 padding-top">
+                    {% placeholder "slider" %}
+                </div>
+
+            </div><!-- /row -->
+        </div><!-- /container -->
+        <!-- End About Us -->
+
+        <!-- Our Team -->
+        <section class="bg-color text-center padding-bottom">
+            <!-- Section General Title -->
+            <div class="general-title bg-color">
+                <h2>{% placeholder "second general title" %}</h2>
+                <div class="title-devider"></div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    {% placeholder "team" %}
+                </div><!-- /row -->
+            </div><!-- /container -->
+        </section>
+        <!-- End Our Team -->
+
+        <!-- Our Clients -->
+        <div class="container text-center padding-top padding-bottom">
+            <div class="row">
+                {% placeholder "partners" %}
+            </div><!-- /row -->
+        </div><!-- /container -->
+        <!-- End Our Clients -->
+
+    </div><!-- /site-wrapper -->
+    <!-- End Site Wrapper -->
+{% endblock %}

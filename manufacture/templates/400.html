@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Bad request" %}{% endblock title %}
+
+
+{% block section_title %}
+    <!-- Section General Title -->
+    <div class="general-title bg-color">
+        <h2>{% trans "Bad request" %}</h2>
+        <div class="title-devider"></div>
+    </div>
+{% endblock section_title %}
+
+{% block section-content %}
+<p class="text-center">{% trans "Sorry, but the request was malformed." %}</p>
+{% endblock %}

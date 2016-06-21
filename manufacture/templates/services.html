@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% load staticfiles cms_tags %}
+
+{% block title %}{% page_attribute "page_title" %}{% endblock title %}
+
+{% block section_title %}
+    <!-- Section General Title -->
+    <div class="general-title bg-color">
+        <h2>{% page_attribute "page_title" %}</h2>
+        <div class="title-devider"></div>
+    </div>
+{% endblock section_title %}
+
+{% block content %}
+    <!-- Site Wrapper -->
+    <div class="site-wrapper">
+
+        <!-- Services -->
+        <div class="container text-center padding-bottom">
+            <div class="row">
+
+                <!-- Service Item (title, icon and description for your service) -->
+                <div class="col-sm-6 col-md-2">
+                    <!-- Icon -->
+                    <a href="#">
+                        <i class="fa fa-cube fa-3x"></i>
+                    </a>
+                    <!-- Title and Description -->
+                    {% placeholder "service 1" %}
+                </div>
+
+                <!-- Service Item (title, icon and description for your service) -->
+                <div class="col-sm-6 col-md-2">
+                    <!-- Icon -->
+                    <a href="#">
+                        <i class="fa fa-file-text-o fa-3x"></i>
+                    </a>
+                    <!-- Title and Description -->
+                    {% placeholder "service 2" %}
+                </div>
+
+                <!-- Service Item (title, icon and description for your service) -->
+                <div class="col-sm-6 col-md-2">
+                    <!-- Icon -->
+                    <a href="http://azbuka-kamnya.ru/магазин/">
+                        <i class="fa fa-shopping-cart  fa-3x"></i>
+                    </a>
+                    <!-- Title and Description -->
+                    {% placeholder "service 3" %}
+                </div>
+
+                <!-- Service Item (title, icon and description for your service) -->
+                <div class="col-sm-6 col-md-2">
+                    <!-- Icon -->
+                    <a href="">
+                        <i class="fa fa-truck fa-3x"></i>
+                    </a>
+                    <!-- Title and Description -->
+                    {% placeholder "service 4" %}
+                </div>
+
+                <!-- Service Item (title, icon and description for your service) -->
+                <div class="col-sm-6 col-md-2">
+                    <!-- Icon -->
+                    <a href="">
+                        <i class="fa fa-puzzle-piece fa-3x"></i>
+                    </a>
+                    <!-- Title and Description -->
+                    {% placeholder "service 5" %}
+                </div>
+
+                <!-- Service Item (title, icon and description for your service) -->
+                <div class="col-sm-6 col-md-2">
+                    <!-- Icon -->
+                    <a href="#">
+                        <i class="fa fa-check fa-3x"></i>
+                    </a>
+                    <!-- Title and Description -->
+                    {% placeholder "service 6" %}
+                </div>
+
+            </div><!-- /row -->
+        </div><!-- /container -->
+        <!-- End Services -->
+
+        <!-- Additional Services -->
+        <section class="text-center bg-color">
+
+            <!-- Section General Title -->
+            <div class="general-title">
+                <h2>Дополнительные услуги</h2>
+                <div class="title-devider"></div>
+            </div>
+
+            <div class="container padding-bottom">
+                <div class="row">
+
+                    <!-- Additional Services -->
+                    <div class="panel-group" id="accordion">
+                        {% placeholder "additional services" %}
+                    </div><!-- panel-group -->
+                    <!-- End Additional Services -->
+
+                </div><!-- /row -->
+            </div><!-- /container -->
+        </section>
+        <!-- End Additional Services -->
+
+    </div><!-- /site-wrapper -->
+    <!-- End Site Wrapper -->
+{% endblock %}

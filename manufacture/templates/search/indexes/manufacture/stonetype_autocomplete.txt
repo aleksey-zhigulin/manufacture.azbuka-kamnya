@@ -1,0 +1,1 @@
+{% extends "search/indexes/manufacture/stonetype_text.txt" %}

@@ -1,0 +1,13 @@
+{% extends "zinnia/entry_detail_base.html" %}
+{% load i18n %}
+{% load zinnia %}
+{% load comments %}
+{% load menu_tags %}
+
+{% block menu %}
+    {% show_menu 0 1 100 100 "news_menu.html" %}
+{% endblock menu %}
+
+{% block entry-content %}
+    {% include object.content_template with object_content=object.html_content nowrapper=True%}
+{% endblock entry-content %}
