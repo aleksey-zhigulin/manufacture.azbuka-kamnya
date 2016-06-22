@@ -18,6 +18,7 @@
 {#{% include "shop/shop/navbar/search-form.html" %}#}
 
 <shop-catalog-list>
+    <p>Показано <span ng-bind="catalog.count"></span> из {{ data.count }}</p>
 	<div class="row" ng-if="catalog.count===undefined">
 	{% for product in data.results %}
 		{% include "shop/catalog/product-preview.html" with ng=0 %}

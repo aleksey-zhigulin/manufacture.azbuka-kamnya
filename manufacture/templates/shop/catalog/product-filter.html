@@ -6,7 +6,7 @@
 {% addtoblock "shop-ng-requires" %}django.shop.filter{% endaddtoblock %}
 
 
-{% angularjs ng %}
+
     <form shop-product-filter class="{{ filter_form_classes }}" role="filter"  method="get" action=".">
         <fieldset>
 
@@ -22,9 +22,7 @@
                         Найти <i class="glyphicon glyphicon-search"></i>
                     </div>
                 </div>
-                <p>Показано {{ sd }} из {{ data.count }}</p>
             </div>
 
         </fieldset>
     </form>
-{% endangularjs %}
