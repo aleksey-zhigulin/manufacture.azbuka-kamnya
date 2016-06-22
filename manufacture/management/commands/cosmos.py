@@ -189,29 +189,29 @@ def retrive_products():
         'color': get_filters('color', filter_form),
     }
     products = get_products(url='/'.join([ROOT_URL, 'rus', 'stock', QUERY.format(0, 0, 0, 0)]))
-    # filtered_products = {}
-    #
-    # for material_name, material_code in filters['material'].iteritems():
-    #     if not check_products_exist(url='/'.join([ROOT_URL, 'rus', 'stock', QUERY.format(
-    #                             material_code, 0, 0, 0)])): continue
-    #     for country_name, country_code in filters['country'].iteritems():
-    #         if not check_products_exist(url='/'.join([ROOT_URL, 'rus', 'stock', QUERY.format(
-    #                 material_code, country_code, 0, 0)])): continue
-    #         for treatment_name, treatment_code in filters['treatment'].iteritems():
-    #             if not check_products_exist(url='/'.join([ROOT_URL, 'rus', 'stock', QUERY.format(
-    #                     material_code, treatment_code, 0, country_code)])): continue
-    #             for color_name, color_code in filters['color'].iteritems():
-    #                 filtered_products.update(get_products(
-    #                         url='/'.join([ROOT_URL, 'rus', 'stock', QUERY.format(
-    #                             material_code, treatment_code, color_code, country_code)]),
-    #                         material=material_name,
-    #                         country=country_name,
-    #                         treatment=treatment_name,
-    #                         color=color_name
-    #                     )
-    #                 )
-    #                 print('Total products count = %s of %s' % (len(filtered_products), len(products)))
-    # products.update(filtered_products)
+    filtered_products = {}
+
+    for country_name, country_code in filters['country'].iteritems():
+        if not check_products_exist(url='/'.join([ROOT_URL, 'rus', 'stock', QUERY.format(
+                0, 0, 0, country_code)])): continue
+        for color_name, color_code in filters['color'].iteritems():
+            if not check_products_exist(url='/'.join([ROOT_URL, 'rus', 'stock', QUERY.format(
+                    0, 0, color_code, country_code)])): continue
+            for material_name, material_code in filters['material'].iteritems():
+                if not check_products_exist(url='/'.join([ROOT_URL, 'rus', 'stock', QUERY.format(
+                        material_code, 0, color_code, country_code)])): continue
+                for treatment_name, treatment_code in filters['treatment'].iteritems():
+                    filtered_products.update(get_products(
+                            url='/'.join([ROOT_URL, 'rus', 'stock', QUERY.format(
+                                material_code, treatment_code, color_code, country_code)]),
+                            material=material_name,
+                            country=country_name,
+                            treatment=treatment_name,
+                            color=color_name
+                        )
+                    )
+                    print('Total products count = %s of %s' % (len(filtered_products), len(products)))
+    products.update(filtered_products)
     for order, product_name in enumerate(products.keys()):
         products[product_name]['order'] = order
         products_query.put(product_name)
@@ -276,27 +276,43 @@ def add_product_to_db(product_name):
             order=values['order'],
             slug=slug
         )
-    stone_type.images.clear()
-    # stone_type.stone_кreatment = Treatment.objects.get_or_create(name=unicode(values['treatment']))[0]
+
+    if values['color']:
+        stone_type.stone_color = Color.objects.get_or_create(name=unicode(values['color']))[0]
+    else:
+        stone_type.stone_color = None
+    if values['material']:
+        stone_type.stone_rock = Rock.objects.get_or_create(name=unicode(values['material']))[0]
+    else:
+        stone_type.stone_rock = None
+    if values['country']:
+        stone_type.stone_country = Country.objects.get_or_create(name=unicode(values['country']))[0]
+    else:
+        stone_type.stone_country = None
+    if values['treatment']:
+        stone_type.stone_treatment = Treatment.objects.get_or_create(name=unicode(values['treatment']))[0]
+    else:
+        stone_type.stone_treatment = None
     stone_type.save()
 
     # Add description
-    ProductTranslation.objects.get_or_create(
-        master=stone_type,
-        description=u'',
-        language_code='ru'
-    )
+    # ProductTranslation.objects.get_or_create(
+    #     master=stone_type,
+    #     description=u'',
+    #     language_code='ru'
+    # )
 
     # Add image
-    ProductImage.objects.get_or_create(
-        image=add_filer_image(
-            file=urlopen(values['thumbnail']).read(),
-            file_name='.'.join([slug, '.jpg']),
-            file_title=product_name,
-            folder=['Образцы камня', 'Космос', 'thumbnails']
-        ),
-        product=stone_type
-    )
+    # stone_type.images.clear()
+    # ProductImage.objects.get_or_create(
+    #     image=add_filer_image(
+    #         file=urlopen(values['thumbnail']).read(),
+    #         file_name='.'.join([slug, '.jpg']),
+    #         file_title=product_name,
+    #         folder=['Образцы камня', 'Космос', 'thumbnails']
+    #     ),
+    #     product=stone_type
+    # )
 
     # Save base stone
     ProductPage.objects.get_or_create(
@@ -304,30 +320,30 @@ def add_product_to_db(product_name):
         product=stone_type
     )
 
-    for group, items in values['groups'].iteritems():
-        for item_number, (name, params) in enumerate(items.iteritems()):
-            stone_form = Type.objects.get_or_create(name=params['type'])[0]
-            size = Size.objects.get_or_create(name=params['size'])[0]
-            thickness = Thickness.objects.get_or_create(name=params['thickness'])[0]
-            currency = Currency.objects.get_or_create(code=params['currency'])[0]
-            new_stone, created = Stone.objects.get_or_create(
-                type=stone_type,
-                unit_price=params['price'],
-                currency=currency,
-                stock=Stock.objects.get_or_create(name=u'Склад 1')[0],
-                stone_size=size,
-                stone_thickness=thickness,
-                stone_form=stone_form,
-            )
-            new_stone.save()
-
-            images_query.put({'instance': new_stone,
-                              'field_name': 'image',
-                              'file': params['img'],
-                              'file_name': '_'.join([slug, group, str(item_number), '.jpg']),
-                              'file_title': ' '.join([product_name, group, str(item_number)]),
-                              'folder': ['Образцы камня', 'Космос', product_name]}),
-            TOTAL_IMAGES += 1
+    # for group, items in values['groups'].iteritems():
+    #     for item_number, (name, params) in enumerate(items.iteritems()):
+    #         stone_form = Type.objects.get_or_create(name=params['type'])[0]
+    #         size = Size.objects.get_or_create(name=params['size'])[0]
+    #         thickness = Thickness.objects.get_or_create(name=params['thickness'])[0]
+    #         currency = Currency.objects.get_or_create(code=params['currency'])[0]
+    #         new_stone, created = Stone.objects.get_or_create(
+    #             type=stone_type,
+    #             unit_price=params['price'],
+    #             currency=currency,
+    #             stock=Stock.objects.get_or_create(name=u'Климовск')[0],
+    #             stone_size=size,
+    #             stone_thickness=thickness,
+    #             stone_form=stone_form,
+    #         )
+    #         new_stone.save()
+    #
+    #         images_query.put({'instance': new_stone,
+    #                           'field_name': 'image',
+    #                           'file': params['img'],
+    #                           'file_name': '_'.join([slug, group, str(item_number), '.jpg']),
+    #                           'file_title': ' '.join([product_name, group, str(item_number)]),
+    #                           'folder': ['Образцы камня', 'Космос', product_name]}),
+    #         TOTAL_IMAGES += 1
 
 def get_stones():
     retrive_thread = Thread(target=retrive_products)
@@ -344,11 +360,11 @@ def get_stones():
         t.daemon = True
         t.start()
 
-    for i in range(NUM_THREADS_IO):
-        t = Thread(target=images_worker)
-        t.daemon = True
-        t.start()
+    # for i in range(NUM_THREADS_IO):
+    #     t = Thread(target=images_worker)
+    #     t.daemon = True
+    #     t.start()
 
     products_query.join()
-    images_query.join()
+    # images_query.join()
     logger_thread.join(timeout=0)

@@ -1,0 +1,30 @@
+{% load djng_tags i18n static sekizai_tags  %}
+
+{% addtoblock "js" %}
+    <script src="{% static 'shop/js/filter-form.js' %}" type="text/javascript"></script>
+{% endaddtoblock %}
+{% addtoblock "shop-ng-requires" %}django.shop.filter{% endaddtoblock %}
+
+
+{% angularjs ng %}
+    <form shop-product-filter class="{{ filter_form_classes }}" role="filter"  method="get" action=".">
+        <fieldset>
+
+            <div class="row">
+                {% for field in filter %}
+                    <div class="col-md-3">
+                        <h4>{{ field.label }}</h4>
+                        {{ field }}
+                    </div>
+                {% endfor %}
+                <div class="input-group">
+                    <div ng-model="filterQuery" class="input-group-addon" ng-click="submitSearch()">
+                        Найти <i class="glyphicon glyphicon-search"></i>
+                    </div>
+                </div>
+                <p>Показано {{ sd }} из {{ data.count }}</p>
+            </div>
+
+        </fieldset>
+    </form>
+{% endangularjs %}

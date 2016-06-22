@@ -10,6 +10,13 @@
 {% addtoblock "shop-ng-requires" %}ui.bootstrap{% endaddtoblock %}
 
 
+
+<shop-catalog-filter>
+    {% include "shop/catalog/product-filter.html" %}
+</shop-catalog-filter>
+
+{#{% include "shop/shop/navbar/search-form.html" %}#}
+
 <shop-catalog-list>
 	<div class="row" ng-if="catalog.count===undefined">
 	{% for product in data.results %}

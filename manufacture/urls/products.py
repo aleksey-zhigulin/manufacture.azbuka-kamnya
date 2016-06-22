@@ -7,7 +7,6 @@ from shop.search.views import SearchView
 from manufacture.serializers import (ProductSummarySerializer, ProductDetailSerializer, CatalogSearchSerializer)
 from manufacture.filters import StoneFilter
 
-from manufacture.views import CMSPageProductListView
 
 urlpatterns = patterns('',
     url(r'^$', CMSPageProductListView.as_view(

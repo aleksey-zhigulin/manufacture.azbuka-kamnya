@@ -13,7 +13,7 @@ WORK_DIR = os.environ.get('DJANGO_WORKDIR', PROJECT_ROOT)
 
 SECRET_KEY = '-d!6*5=odhriaz_sk&z$+u_qnzi1(vof3k6!77i1s*$arx*dz^'
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -330,14 +330,14 @@ for priv_attr in ('DATABASES', 'SECRET_KEY', 'EMAIL_HOST', 'EMAIL_PORT',
 
 
 if DEBUG:
-    INTERNAL_IPS = ('127.0.0.1',)
-    MIDDLEWARE_CLASSES += (
-        'debug_toolbar.middleware.DebugToolbarMiddleware',
-    )
+    # INTERNAL_IPS = ('127.0.0.1',)
+    # MIDDLEWARE_CLASSES += (
+    #     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # )
 
-    INSTALLED_APPS += (
-        'debug_toolbar',
-    )
+    # INSTALLED_APPS += (
+    #     'debug_toolbar',
+    # )
 
     DEBUG_TOOLBAR_PANELS = [
         'debug_toolbar.panels.versions.VersionsPanel',
