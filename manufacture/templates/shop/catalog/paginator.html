@@ -13,7 +13,12 @@
 			<li ng-if="!isLoading"><i in-view="$inview && loadMore()">&nbsp;</i></li>
 		</ul>
 	</div>
-	<div class="col-xs-12" ng-if="catalog.count===0"><h2>Ничего не найдено :(</h2></div>
+	<div class="col-xs-12" ng-if="catalog.count===0">
+        <h2 class="text-center">
+            Нет камня удовлетворяющего условиям поиска <i class="fa fa-frown-o"></i><br/>
+            Измените условия поиска
+        </h2>
+    </div>
 </div>
 
 {% endspaceless %}

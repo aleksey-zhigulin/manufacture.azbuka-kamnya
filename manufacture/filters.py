@@ -70,5 +70,5 @@ class StoneFilter(django_filters.FilterSet):
 
     class Meta:
         model = Product
-        fields = ['material', 'country', 'color', 'country']
+        fields = ['material', 'country', 'color', 'treatment']
 

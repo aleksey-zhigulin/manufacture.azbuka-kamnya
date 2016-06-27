@@ -13,7 +13,7 @@ WORK_DIR = os.environ.get('DJANGO_WORKDIR', PROJECT_ROOT)
 
 SECRET_KEY = '-d!6*5=odhriaz_sk&z$+u_qnzi1(vof3k6!77i1s*$arx*dz^'
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 

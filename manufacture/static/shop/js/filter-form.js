@@ -14,8 +14,11 @@
                 var acPromise = null;
 
                 // handle filter
-                $scope.filter = function() {
+                $scope.filter = function(flush) {
                     var config;
+                    if (flush) {
+                        $scope.property_filters = {};
+                    }
                     if ($scope.property_filters.length == 0) {
                         config = null;
                         $location.search({});
@@ -40,7 +43,6 @@
                         $scope.$emit('shopCatalogFilter', config.params);
                     }, 666);
                 };
-
             }],
             link: function(scope, element, attrs, formController) {
                 var i, splitted, queries = {params: $location.search()};
@@ -80,7 +82,7 @@
                                 scope.property_filters[param] = {};
                             }
                             scope.property_filters[param][key] = value;
-                            if (typeof queries.params[param] === 'sting') {
+                            if (typeof queries.params[param] === 'string') {
                                 break;
                             }
                         }
@@ -90,7 +92,8 @@
 
                 // handle classic search submission through form
                 scope.submitSearch = function() {
-                    if (scope.searchQuery.length > 1) {
+                    if (scope.property_filters.length > 0) {
+                        console.log(element[0]);
                         element[0].submit();
                     }
                 };

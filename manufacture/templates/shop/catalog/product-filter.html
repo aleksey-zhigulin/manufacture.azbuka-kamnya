@@ -7,22 +7,20 @@
 
 
 
-    <form shop-product-filter class="{{ filter_form_classes }}" role="filter"  method="get" action=".">
-        <fieldset>
+{#<form shop-product-filter class="{{ filter_form_classes }}" role="filter"  method="get" action=".">#}
+{#    <fieldset>#}
+{#        {% for field in filter %}#}
+{#            <h4>{{ field.label }}</h4>#}
+{#            {{ field }}#}
+{#        {% endfor %}#}
+{#        <div class="btn btn-default" ng-click="filter(true)">#}
+{#            Сбросить фильтр#}
+{#        </div>#}
+{#        <div class="input-group">#}
+{#            <div ng-model="filterQuery" class="btn btn-default" ng-click="submitSearch()">#}
+{#                Найти <i class="glyphicon glyphicon-search"></i>#}
+{#            </div>#}
+{#        </div>#}
+{#    </fieldset>#}
+{#</form>#}
 
-            <div class="row">
-                {% for field in filter %}
-                    <div class="col-md-3">
-                        <h4>{{ field.label }}</h4>
-                        {{ field }}
-                    </div>
-                {% endfor %}
-                <div class="input-group">
-                    <div ng-model="filterQuery" class="input-group-addon" ng-click="submitSearch()">
-                        Найти <i class="glyphicon glyphicon-search"></i>
-                    </div>
-                </div>
-            </div>
-
-        </fieldset>
-    </form>
